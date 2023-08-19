@@ -111,19 +111,22 @@ act_codes.forEach(function(code, i) {
 
 
 // Start the SVG
-var svg = d3.select("#chart").append("svg")
+const svg = d3.select("#chart").append("svg")
     .attr("width", width)
     .attr("height", height);
 
 
+// Parse data into sched_objs
+// sched_objs stores the activities and durations for each person
+// TODO: incorporate size data
 data.forEach(function(d) {
-	var day_array = d.split(",");
-	var activities = [];
-	for (var i=0; i < day_array.length; i++) {
+	const day_array = d.split(","); // [sample_id 1, time_in_state 1, ..]
+	const activities = [];
+	for (let i=1; i < day_array.length; i+=2) {
 		// Duration
-		if (i % 2 == 1) {
+//		if (i % 2 == 1) {
 			activities.push({'act': day_array[i-1], 'duration': +day_array[i]});
-		}
+//		}
 	}
 	sched_objs.push(activities);
 });
