@@ -275,11 +275,12 @@ def show(df, **kwargs):
         X = [tmplist] + X
 
     # Node size in the same order as the uiid
-    nodedict = dict(zip(df['sample_id'], df['size']))
+    sample_df = df[['sample_id', 'size', 'color']].drop_duplicates(subset=['sample_id']).set_index('sample_id')
+    nodedict = sample_df['size'].to_dict()
     config['node_size'] = list(map(lambda x: nodedict.get(x), uiid))
 
     # Node color in the same order as the uiid
-    nodedict = dict(zip(df['sample_id'], df['color']))
+    nodedict = sample_df['color'].to_dict()
     config['node_color'] = list(map(lambda x: nodedict.get(x), uiid))
 
     # Set color codes for the d3js
