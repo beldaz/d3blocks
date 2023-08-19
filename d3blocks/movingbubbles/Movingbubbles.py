@@ -208,7 +208,7 @@ def _set_nodesize(df, sample_id, size, logger):
     elif isinstance(size, str):
         # use the specified column as node size
         if logger is not None:
-            logger.info("Used column %s for node size.")
+            logger.info("Used column %s for node size.", size)
         df["size"] = df[size].astype(int)
 
     # If the size column not exists, create one with default size
