@@ -298,6 +298,7 @@ def show(df, **kwargs):
     config['start_hour'] = df[config['columns']['datetime']].dt.hour[0]
     config['start_minute'] = df[config['columns']['datetime']].dt.minute[0]
     config['start_day'] = df[config['columns']['datetime']].dt.day[0]
+    config['start_date'] = df[config['columns']['datetime']].dt.date[0]
 
     datestart = df[config['columns']['datetime']].iloc[0]
     datestop = df[config['columns']['datetime']].iloc[-1]
@@ -363,6 +364,7 @@ def write_html(X, config, logger=None):
         'COLOR_METHOD': config['color_method'],
         'START_HOUR_MIN': config['start_hour'] + (config['start_minute'] / 60),
         'START_TIME': zero_to_hour + str(config['start_hour']) + ":" + zero_to_min + str(config['start_minute']),
+        'START_DATE': config['start_date'].isoformat(),
 
         'SUPPORT': config['support'],
 

@@ -81,7 +81,13 @@ var color_method = "{{ COLOR_METHOD }}"; //Nodes can be colored based on "STATE"
 data = {{ json_data }}
 
 var center_act = {{ CENTER }},
-	center_pt = { "x": 380, "y": 365 };
+	center_pt = { "x": Math.round(width/2), "y": Math.round(height/2) };
+//	center_pt = { "x": 380, "y": 365 };
+
+var start_date = new Date("{{ START_DATE }}");
+
+console.log("Start date %s", start_date)
+
 
 var theta = 2 * Math.PI / (center_act ? (act_codes.length - 1) : act_codes.length );
 
@@ -228,8 +234,8 @@ function timer() {
 	force.resume();
 	curr_minute += 1;
 
-	console.log(curr_minute)
-	console.log(act_counts)
+	// console.log(curr_minute)
+	// console.log(act_counts)
 	// Update percentages
 	label.selectAll("tspan.actpct")
 		.text(function(d) {
