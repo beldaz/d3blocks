@@ -24,28 +24,27 @@ Licensed    : GPL3
 
 <body>
     <div id="main-wrapper">
-    <div id="sidebar">
-    <div id="current_time">{{ START_TIME }}</div>
-    
-    <div id="speed">
-        <div class="togglebutton slow current" data-val="slow">Slow</div>
-        <div class="togglebutton medium" data-val="medium">Medium</div>
-        <div class="togglebutton fast" data-val="fast">Fast</div>
-        <div class="clr"></div>
-    </div>
+		<div id="sidebar">
+			<div id="current_time">{{ START_TIME }}</div>
+			
+			<div id="speed">
+				<div class="togglebutton slow current" data-val="slow">Slow</div>
+				<div class="togglebutton medium" data-val="medium">Medium</div>
+				<div class="togglebutton fast" data-val="fast">Fast</div>
+				<div class="clr"></div>
+			</div>
 
+			<div id="note"></div>
 
-    <div id="note"></div>
+				<div id="cite">
+					{{ NOTE }}
+				</div>
 
-        <div id="cite">
-            {{ NOTE }}
-        </div>
+		</div>
 
-    </div>
-
-    <div id="chart"></div>
-    
-    <div class="clr"></div>
+		<div id="chart"></div>
+		
+		<div class="clr"></div>
     </div>
 
 
@@ -97,7 +96,7 @@ act_codes.forEach(function(code, i) {
 	if (code.desc == center_act) {
 		foci[code.index] = center_pt;
 	} else {
-		foci[code.index] = {x: 250 * Math.cos(i * theta)+380, y: 250 * Math.sin(i * theta)+365 };
+		foci[code.index] = {x: 0.35* width * Math.cos(i * theta)+center_pt.x, y: 0.35 * height * Math.sin(i * theta)+center_pt.y };
 	}
 });
 
@@ -167,7 +166,7 @@ var label = svg.selectAll("text")
 		if (d.desc == center_act) {
 			return center_pt.x;
 		} else {
-			return 340 * Math.cos(i * theta)+380;
+			return 0.4 * width * Math.cos(i * theta)+center_pt.x;
 		}
 		
 	})
@@ -175,7 +174,7 @@ var label = svg.selectAll("text")
 		if (d.desc == center_act) {
 			return center_pt.y;
 		} else {
-			return 340 * Math.sin(i * theta)+365;
+			return 0.4 * height * Math.sin(i * theta)+center_pt.y;
 		}
 		
 	});
