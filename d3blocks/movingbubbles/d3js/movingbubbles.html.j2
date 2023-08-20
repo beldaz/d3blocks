@@ -215,6 +215,9 @@ function timer() {
 			// Add to new activity count
 			act_counts[curr_node.act] += 1;
 		
+			// Update size
+			curr_node.radius = curr_node.sched[ curr_moves ].size;
+
 			curr_node.moves = curr_moves;
 			curr_node.cx = foci[curr_node.act].x;
 			curr_node.cy = foci[curr_node.act].y;
@@ -301,6 +304,7 @@ function tick(e) {
 
   circle
 	  .each(collide(.5))
+	  .attr("r", function(d) { return d.radius; })
 	  .style("fill", function(d) { return d.color; })
 	  .attr("cx", function(d) { return d.x; })
 	  .attr("cy", function(d) { return d.y; });
