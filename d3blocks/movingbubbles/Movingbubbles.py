@@ -296,9 +296,19 @@ def show(df, **kwargs):
     config['start_hour'] = df[config['columns']['datetime']].dt.hour[0]
     config['start_minute'] = df[config['columns']['datetime']].dt.minute[0]
     config['start_day'] = df[config['columns']['datetime']].dt.day[0]
+    config['start_date'] = df[config['columns']['datetime']].dt.date[0]
 
     datestart = df[config['columns']['datetime']].iloc[0]
     datestop = df[config['columns']['datetime']].iloc[-1]
+
+    intervals = (datestop - datestart).total_seconds()
+    if config['timedelta']=='minutes':
+        intervals = intervals / 60
+    elif config['timedelta']=='days':
+        intervals = intervals / 60 / 60 / 24
+    # Otherwise it is in seconds
+
+    config['intervals'] = intervals
     
     if config['note'] is None:
         config['note'] = "This is a simulation of multiple states and samples. <a href='https://github.com/d3blocks/d3blocks'>d3blocks movingbubbles</a>."
@@ -366,6 +376,8 @@ def write_html(X, config, logger=None):
         'SUPPORT': config['support'],
 
     }
+    # 'START_DATE': config['start_date'].isoformat(),
+    # 'INTERVALS': config['intervals'],
 
     try:
         jinja_env = Environment(loader=PackageLoader(package_name=__name__, package_path='d3js'))

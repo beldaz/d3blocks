@@ -238,10 +238,11 @@ function timer() {
 
 	// Update time
 	var true_minute = curr_minute % 1440;
+
+	// TODO: Display date or day number
 	d3.select("#current_time").text(minutesToTime(true_minute));
 	
 	// Update notes
-	// var true_minute = curr_minute % 1440;
 	if (true_minute == time_notes[notes_index].start_minute) {
 		d3.select("#note")
 			.style("top", "0px")
@@ -407,6 +408,16 @@ function minutesToTime(m) {
 	
 	return hh + ":" + mm
 }
+
+//function intervalsToDate(m) {
+//	// Read iso format data
+//	let current_date = new Date("{{ START_TIME }}")
+//	current_date.setDate(event.getDate() + m)
+//	// Add days
+//	current_date.setDate(current_date.getDate() + days) 
+//	// Format just the date
+//	return current_date.toISOString().slice(0,10)
+//}
 
 //function minutesToTime(m) {
 //	var minutes = (m + {{ START_HOUR_MIN }}*60) % 1440;
