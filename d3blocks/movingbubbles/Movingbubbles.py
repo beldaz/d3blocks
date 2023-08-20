@@ -260,19 +260,12 @@ def show(df, **kwargs):
 
     # Transform dataframe into input form for d3
     X = []
-    sid = np.array(list(map(lambda x: labels.get(x)['id'], df[config['columns']['state']].values)))
+    df['state_id'] = df[config['columns']['state']].map(lambda x: labels.get(x)['id'])
     uiid = np.unique(df['sample_id'])
-    for i in uiid:
-        # Combine the sample_id with its time in state
-        Iloc=df['sample_id']==i
-        tmplist=str(list(zip(sid[Iloc], df['time_in_state'].loc[Iloc].values)))
-        tmplist=tmplist.replace('(', '')
-        tmplist=tmplist.replace(')', '')
-        tmplist=tmplist.replace('[', '')
-        tmplist=tmplist.replace(']', '')
-        tmplist=tmplist.replace(' ', '')
-        # Make one big happy list
-        X = [tmplist] + X
+    X = [
+            df[df['sample_id']==i][['state_id', 'time_in_state']].to_csv(header=False, index=False, sep=',', lineterminator=',',)[:-1]
+            for i in uiid
+    ]
 
     # Node size in the same order as the uiid
     sample_df = df[['sample_id', 'size', 'color']].drop_duplicates(subset=['sample_id']).set_index('sample_id')
@@ -420,7 +413,8 @@ def standardize(df, method=None, sample_id='sample_id', datetime='datetime', dt_
 
     # Check datetime format
     if not isinstance(df[datetime].iloc[0], dt.date):
-        if logger is not None: logger.info('Set datetime format to [%s]' %(dt_format))
+        if logger is not None:
+            logger.info('Set datetime format to [%s]', dt_format)
         df[datetime] = pd.to_datetime(df[datetime], format=dt_format)
 
     # Initialize empty delta
@@ -432,7 +426,8 @@ def standardize(df, method=None, sample_id='sample_id', datetime='datetime', dt_
     # timenow = timenow.replace(year=1980, month=1, day=1, hour=0, minute=0, second=0)
 
     if method=='samplewise':
-        if logger is not None: logger.info('Standardize method: [%s]' %(method))
+        if logger is not None:
+            logger.info('Standardize method: [%s]' %(method))
         df = df.sort_values(by=[sample_id, datetime])
         df.reset_index(drop=True, inplace=True)
         # Standardize per unique sample id.
