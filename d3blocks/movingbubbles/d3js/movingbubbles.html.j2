@@ -136,6 +136,8 @@ var nodes = sched_objs.map(function(o, i) {
 	}
 });
 
+console.log(act_counts)
+
 var force = d3.layout.force()
 	.nodes(nodes)
 	.size([width, height])
@@ -408,16 +410,6 @@ function minutesToTime(m) {
 	
 	return hh + ":" + mm
 }
-
-//function intervalsToDate(m) {
-//	// Read iso format data
-//	let current_date = new Date("{{ START_TIME }}")
-//	current_date.setDate(event.getDate() + m)
-//	// Add days
-//	current_date.setDate(current_date.getDate() + days) 
-//	// Format just the date
-//	return current_date.toISOString().slice(0,10)
-//}
 
 //function minutesToTime(m) {
 //	var minutes = (m + {{ START_HOUR_MIN }}*60) % 1440;

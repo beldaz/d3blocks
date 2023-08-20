@@ -259,13 +259,15 @@ def show(df, **kwargs):
         df['time_in_state'] = df['delta'].dt.days.astype(int)
 
     # Transform dataframe into input form for d3
-    X = []
     df['state_id'] = df[config['columns']['state']].map(lambda x: labels.get(x)['id'])
     uiid = np.unique(df['sample_id'])
     X = [
             df[df['sample_id']==i][['state_id', 'size', 'time_in_state']].to_csv(header=False, index=False, sep=',', lineterminator=',',)[:-1]
             for i in uiid
     ]
+    # dump X to json file
+    with open('../data/X.json', 'w') as f:
+        json.dump(X, f)
 
     # Node size in the same order as the uiid
     sample_df = df[['sample_id', 'size', 'color']].drop_duplicates(subset=['sample_id']).set_index('sample_id')
@@ -301,20 +303,11 @@ def show(df, **kwargs):
     datestart = df[config['columns']['datetime']].iloc[0]
     datestop = df[config['columns']['datetime']].iloc[-1]
 
-    intervals = (datestop - datestart).total_seconds()
-    if config['timedelta']=='minutes':
-        intervals = intervals / 60
-    elif config['timedelta']=='days':
-        intervals = intervals / 60 / 60 / 24
-    # Otherwise it is in seconds
-
-    config['intervals'] = intervals
-    
     if config['note'] is None:
         config['note'] = "This is a simulation of multiple states and samples. <a href='https://github.com/d3blocks/d3blocks'>d3blocks movingbubbles</a>."
         config['note'] = config['note'] + "\nDate start: " + str(datestart) + "\n" + "Date stop:  " + str(datestop) + "\nRuntime: " + str(datestop - datestart) + "\nEstimated time to Finish: " + str(datestart + (datestop - datestart))
 
-    if config['time_notes'] is None:
+    if config['time_notes'] is None or len(config['time_notes'])<1:
         config['time_notes'] = [{"start_minute": 1, "stop_minute": 2, "note": ""}]
     # Convert to json format
     config['time_notes'] = json.dumps(config['time_notes'])
@@ -349,6 +342,8 @@ def write_html(X, config, logger=None):
     SELECTED_STATE = {'STATE': '', 'NODE': ''}
     SELECTED_STATE[config['color_method']] = 'selected="selected"'
 
+    print('X length:', len(X))
+    print(config)
     content = {
         'json_data': X,
         'TITLE': config['title'],
