@@ -298,11 +298,9 @@ def show(df, **kwargs):
     config['start_hour'] = df[config['columns']['datetime']].dt.hour[0]
     config['start_minute'] = df[config['columns']['datetime']].dt.minute[0]
     config['start_day'] = df[config['columns']['datetime']].dt.day[0]
-    config['start_date'] = df[config['columns']['datetime']].dt.date[0]
 
     datestart = df[config['columns']['datetime']].iloc[0]
     datestop = df[config['columns']['datetime']].iloc[-1]
-
     if config['note'] is None:
         config['note'] = "This is a simulation of multiple states and samples. <a href='https://github.com/d3blocks/d3blocks'>d3blocks movingbubbles</a>."
         config['note'] = config['note'] + "\nDate start: " + str(datestart) + "\n" + "Date stop:  " + str(datestop) + "\nRuntime: " + str(datestop - datestart) + "\nEstimated time to Finish: " + str(datestart + (datestop - datestart))
@@ -342,8 +340,6 @@ def write_html(X, config, logger=None):
     SELECTED_STATE = {'STATE': '', 'NODE': ''}
     SELECTED_STATE[config['color_method']] = 'selected="selected"'
 
-    print('X length:', len(X))
-    print(config)
     content = {
         'json_data': X,
         'TITLE': config['title'],
@@ -371,8 +367,6 @@ def write_html(X, config, logger=None):
         'SUPPORT': config['support'],
 
     }
-    # 'START_DATE': config['start_date'].isoformat(),
-    # 'INTERVALS': config['intervals'],
 
     try:
         jinja_env = Environment(loader=PackageLoader(package_name=__name__, package_path='d3js'))
@@ -434,7 +428,7 @@ def standardize(df, method=None, sample_id='sample_id', datetime='datetime', dt_
 
     if method=='samplewise':
         if logger is not None:
-            logger.info('Standardize method: [%s]' %(method))
+            logger.info('Standardize method: [%s]', method)
         df = df.sort_values(by=[sample_id, datetime])
         df.reset_index(drop=True, inplace=True)
         # Standardize per unique sample id.
