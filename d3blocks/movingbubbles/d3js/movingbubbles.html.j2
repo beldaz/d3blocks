@@ -18,10 +18,9 @@ Licensed    : GPL3
 .node { stroke-width: 1.5px; }
 
 </style>
+<meta charset="utf-8">
 </head>
 
-
-<meta charset="utf-8">
 
 <body>
     <div id="main-wrapper">
@@ -135,7 +134,6 @@ var nodes = sched_objs.map(function(o, i) {
 		sched: o,
 	}
 });
-console.log(act_codes)
 
 var force = d3.layout.force()
 	.nodes(nodes)
@@ -189,9 +187,8 @@ label.append("tspan")
 	.attr("text-anchor", "middle")
 	.attr("class", "actpct")
 	.text(function(d) {
-		return act_counts[d.index] + "%";
-	});
-	
+		return readablePercent(act_counts[d.index]);
+	});	
 
 // Update nodes based on activity and duration
 function timer() {
@@ -381,6 +378,10 @@ function color(activity) {
 function readablePercent(n) {
 	
 	var pct = 100 * n / data.length;
+	if (pct >= 100) {
+		// Print error showing bad percent
+		console.log("Warning: Percent %s from %s is greater than 100%", pct, n);
+	}
 	if (pct < 1 && pct > 0) {
 		pct = "<1%";
 	} else {
