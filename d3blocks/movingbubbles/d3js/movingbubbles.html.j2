@@ -25,9 +25,7 @@ Licensed    : GPL3
 <body>
     <div id="main-wrapper">
 		<div id="sidebar">
-			<div id="current_time">{{ START_TIME }}</div>
-			<div id="real_time">{{ START_TIME }}</div>
-			<div id="real_date">{{ START_DATE }}</div>
+			<div id="current_time">{{ START_DATE }}</div>
 			
 			<div id="speed">
 				<div class="togglebutton slow current" data-val="slow">Slow</div>
@@ -87,7 +85,7 @@ var center_act = {{ CENTER }},
 
 var start_date = new Date("{{ START_DATE }}");
 
-console.log("Start date %s", start_date)
+var num_days = {{ DAYS }}
 
 
 var theta = 2 * Math.PI / (center_act ? (act_codes.length - 1) : act_codes.length );
@@ -244,15 +242,17 @@ function timer() {
 		});
 
 	// Update time
-	var true_minute = curr_minute % 1440;
+	//var true_minute = curr_minute % 1440;
+	var true_day = curr_minute % num_days;
 
-	// TODO: Display date or day number
-	// Format curr_minute as 4 digit string
-	d3.select("#current_time").text(curr_minute.toString().padStart(4, '0')) // minutesToTime(true_minute));
-	d3.select("#real_time").text(curr_minute.toString().padStart(4, '0')) // minutesToTime(true_minute));
+	//d3.select("#current_time").text(curr_minute.toString().padStart(4, '0')) // minutesToTime(true_minute));
+	
+	let current_date = new Date(start_date.getTime() + true_day * 24 * 60 * 60 * 1000);
+	// Format date as string
+	d3.select("#current_time").text(current_date.toISOString().slice(0,10));
 	
 	// Update notes
-	if (true_minute == time_notes[notes_index].start_minute) {
+	if (true_day == time_notes[notes_index].start_minute) {
 		d3.select("#note")
 			.style("top", "0px")
 		  .transition()
@@ -263,7 +263,7 @@ function timer() {
 	} 
 	
 	// Make note disappear at the end.
-	else if (true_minute == time_notes[notes_index].stop_minute) {
+	else if (true_day == time_notes[notes_index].stop_minute) {
 		
 		d3.select("#note").transition()
 			.duration(1000)

@@ -302,6 +302,7 @@ def show(df, **kwargs):
 
     datestart = df[config['columns']['datetime']].iloc[0]
     datestop = df[config['columns']['datetime']].iloc[-1]
+    config['days'] = (datestop - datestart).days
     if config['note'] is None:
         config['note'] = "This is a simulation of multiple states and samples. <a href='https://github.com/d3blocks/d3blocks'>d3blocks movingbubbles</a>."
         config['note'] = config['note'] + "\nDate start: " + str(datestart) + "\n" + "Date stop:  " + str(datestop) + "\nRuntime: " + str(datestop - datestart) + "\nEstimated time to Finish: " + str(datestart + (datestop - datestart))
@@ -365,6 +366,7 @@ def write_html(X, config, logger=None):
         'START_HOUR_MIN': config['start_hour'] + (config['start_minute'] / 60),
         'START_TIME': zero_to_hour + str(config['start_hour']) + ":" + zero_to_min + str(config['start_minute']),
         'START_DATE': config['start_date'].isoformat(),
+        'DAYS': config['days'],
 
         'SUPPORT': config['support'],
 
