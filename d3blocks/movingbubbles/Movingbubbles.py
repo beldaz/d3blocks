@@ -263,7 +263,7 @@ def show(df, **kwargs):
     df['state_id'] = df[config['columns']['state']].map(lambda x: labels.get(x)['id'])
     uiid = np.unique(df['sample_id'])
     X = [
-            df[df['sample_id']==i][['state_id', 'time_in_state']].to_csv(header=False, index=False, sep=',', lineterminator=',',)[:-1]
+            df[df['sample_id']==i][['state_id', 'size', 'time_in_state']].to_csv(header=False, index=False, sep=',', lineterminator=',',)[:-1]
             for i in uiid
     ]
 

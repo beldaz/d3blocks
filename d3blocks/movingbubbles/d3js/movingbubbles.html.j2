@@ -81,13 +81,6 @@ var color_method = "{{ COLOR_METHOD }}"; //Nodes can be colored based on "STATE"
 // DATA. The nodes are comma seperated and within each node, the pattern is: ["sample_id 1, time_in_state 1, ..", "sample_id 2, time_in_state 1, ..", ..]
 data = {{ json_data }}
 
-// color_method selection changes. Listen if changes are made (onchange=link_color_changed())
-function link_color_changed(linkColor_value) {
-    console.log(linkColor_value)
-    color_method = linkColor_value
-}
-
-
 var center_act = {{ CENTER }},
 	center_pt = { "x": 380, "y": 365 };
 
@@ -115,8 +108,8 @@ data.forEach(function(d) {
 	var activities = [];
 	for (var i=0; i < day_array.length; i++) {
 		// Duration
-		if (i % 2 == 1) {
-			activities.push({'act': day_array[i-1], 'duration': +day_array[i]});
+		if (i % 3 == 2) {
+			activities.push({'act': day_array[i-2], 'size': +day_array[i-1], 'duration': +day_array[i]});
 		}
 	}
 	sched_objs.push(activities);
